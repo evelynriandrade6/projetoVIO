@@ -18,7 +18,7 @@ function listUsers() {
   const navigate = useNavigate();
 
   async function getUsers(){
-    // Chamada da Api
+    // Chamada da Api)
     await api.getUsers().then(
       (response)=>{
         console.log(response.data.users)
