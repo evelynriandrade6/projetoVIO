@@ -14,26 +14,37 @@ import { Button, IconButton, Alert, Snackbar } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ConfirmDelete from "../components/ConfirmDelete";
 
 function listUsers() {
   const [users, setUsers] = useState([]);
   const [alert, setAlert] = useState({
-    //visibilidade (false = invisible omg is a metal gear solid snake reference????; true:visivel)
+    // Visibilidade (false = invisible; true:visivel)
     open: false,
-    //nivel do alerta(sucess,error, warning, etc)
+    // Nível do alerta(sucess,error, warning, etc)
     severity: "",
     message: "",
   });
 
-  //funçaõ para exibir o alerta
+  const navigate = useNavigate();
+
+  const [userToDelete, setUserDelete] = useState("");
+  const [modalOpen, setModalOpen] = useState("");
+
+  // Função para exibir o alerta
   const showAlert = (severity, message) => {
     setAlert({ open: true, severity, message });
   };
-  //fechar o alert
+  // Fechar o alert
   const handleCloseAlert = () => {
     setAlert({ ...alert, open: false });
   };
-  const navigate = useNavigate();
+
+  const openDeleteModal = (id, name)=>{
+    setUserDelete({id: id, name: name})
+    setModalOpen(true);
+  };
+
   async function getUsers() {
     // Chamada da Api
     await api.getUsers().then(
@@ -47,16 +58,18 @@ function listUsers() {
     );
   }
 
-  async function deleteUser(id) {
+  async function deleteUser() {
     try {
-      await api.deleteUsers(id);
+      await api.deleteUsers(userToDelete.id);
       await getUsers();
       showAlert(
         "sucess",
-        "Usuario exculido com sucesso")
+        "Usuario exculido com sucesso");
+        setModalOpen(false)
     } catch (error) {
       console.log("erro ao deletar usuario...", error);
       showAlert("error", error.response.data.error);
+      setModalOpen(false)
     }
   }
 
@@ -67,7 +80,7 @@ function listUsers() {
         <TableCell align="center">{user.email}</TableCell>
         <TableCell align="center">{user.cpf}</TableCell>
         <TableCell align="center">
-          <IconButton onClick={() => deleteUser()}>
+          <IconButton onClick={() => openDeleteModal(user.id_usuario,user.name)}>
             <DeleteOutlineIcon color="error" />
           </IconButton>
         </TableCell>
@@ -98,6 +111,12 @@ function listUsers() {
           {alert.message}
         </Alert>
       </Snackbar>
+      <ConfirmDelete
+      open={modalOpen}
+      userName={userToDelete.name}
+      onConfirm={deleteUser}
+      onClose={()=>setModalOpen(false)}
+      />
       {users.length === 0 ? (
         <h1>Carregando usuários</h1>
       ) : (
