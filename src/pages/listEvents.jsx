@@ -13,7 +13,7 @@ import { useState, useEffect } from "react";
  import { Button, IconButton, Alert, Snackbar } from "@mui/material";
  import { Link, useNavigate } from "react-router-dom";
  import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
- 
+    // Atividade de Eventos
  function listEvents() {
      const [events, setEvents] = useState([]);
      const [alert, setAlert] = useState({

@@ -6,6 +6,7 @@ import Cadastro from "./pages/Cadastro";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ListEvents from "./pages/listEvents";
 
+// Atividade de Eventos
 function App() {
   return (
     <div>
