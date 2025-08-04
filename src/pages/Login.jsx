@@ -111,7 +111,7 @@ function Login() {
               mb: 2,
               backgroundColor: "green",
             }}>
-            <Link to="/cadastro">Cadastro</Link>
+            <Link to="/CreateEvent">Cadastro de Eventos</Link>
           </Button>
         </Box>
         
